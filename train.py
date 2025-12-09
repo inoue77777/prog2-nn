@@ -56,7 +56,8 @@ for epoch in range(n_epochs):
     train_loss = models.train(model, dataloader_train, loss_fn, optimizer)
     print(f"  train loss: {train_loss:.4f}")
     time_end = time.time()
-    print(f"   training loss: {train_loss}")
+    print(f"   training loss: {train_loss} ({time_end-time_start}s)")
+    print(f"   training loss: {train_loss} ({time_end-time_start:.3f}s)")
     train_loss_log.append(train_loss)
 
     val_loss = models.test(model, dataloader_test, loss_fn)
