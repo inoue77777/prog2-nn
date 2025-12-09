@@ -11,7 +11,6 @@ ds_transform = transforms.Compose([
     transforms.ToDtype(torch.float32, scale=True)
 ])
 
-
 # データセットの読み込み
 ds_train = datasets.FashionMNIST(
     root="data",
@@ -38,9 +37,12 @@ dataloader_test = torch.utils.data.DataLoader(
 # モデルのインスタンスを作成
 model = models.MyModel()
 
-# 損失関数（誤差関数・ロス関数）の選択
+# ロス関数
 loss_fn = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+# 最適化手法
+learning_rate=le-3
+optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 n_epochs = 20
 
@@ -54,47 +56,53 @@ for epoch in range(n_epochs):
 
     time_start = time.time()
     train_loss = models.train(model, dataloader_train, loss_fn, optimizer)
-    print(f"  train loss: {train_loss:.4f}")
     time_end = time.time()
-    print(f"   training loss: {train_loss} ({time_end-time_start}s)")
     print(f"   training loss: {train_loss} ({time_end-time_start:.3f}s)")
+    print(f"   training loss: {train_loss:.3f} ({time_end-time_start:.3f}s)")
     train_loss_log.append(train_loss)
 
+    time_start=time.time()
     val_loss = models.test(model, dataloader_test, loss_fn)
-    print(f"  val loss: {val_loss:.4f}")
+    time_end = time.time
+    print(f"  validation loss: {val_loss:.3f}({time_end-time_start:/.3f}s)")
     val_loss_log.append(val_loss)
 
+    time_start = time.time()
     train_acc = models.test_accuracy(model, dataloader_train)
-    print(f"  train acc: {train_acc*100:.2f}%")
+    time_end = time.time()
+    print(f"    train accuracy:{train_acc * 100:.3f}%({time_end-time_start:.3f}s)")
     train_acc_log.append(train_acc)
 
+    time_start = time.time()
     val_acc = models.test_accuracy(model, dataloader_test)
-    print(f"  val acc: {val_acc*100:.2f}%")
+    time_end = time.time()
+    print(f"    validation accuracy:{val_acc * 100:.3f}%({time_end-time_start:.3f}s)")
     val_acc_log.append(val_acc)
 
 
 # グラフ描画
-epochs = range(1, n_epochs + 1)
-
-plt.figure(figsize=(12, 5))
-
 plt.subplot(1, 2, 1)
-plt.plot(epochs, train_loss_log, label='train')
-plt.plot(epochs, val_loss_log, label='validation')
-plt.xlabel("epochs")
-plt.ylabel("loss")
-plt.xticks(epochs)
-plt.grid()
+plt.plot(range(1, n_epochs + 1), train_loss_log, label = "train")
 plt.legend()
+
+
+plt.plot(range(1, n_epochs + 1), val_loss_log, label = "validation")
+plt.legend()
+plt.xlabel("epochs")
+plt.xticks(range(1, n_epochs + 1))
+plt.ylabel("loss")
+plt.grid()
 
 
 plt.subplot(1, 2, 2)
-plt.plot(epochs, train_acc_log, label='train')
-plt.plot(epochs, val_acc_log, label='validation')
-plt.xlabel("epochs")
-plt.ylabel("accuracy")
-plt.xticks(epochs)
-plt.grid()
+plt.plot(range(1, n_epochs + 1), train_acc_log, label='train')
 plt.legend()
+
+plt.plot(range(1, n_epochs + 1), vall_acc_log, label="validation")
+plt.legend()
+plt.xlabel("epochs")
+plt.xticks(range(1, n_epochs + 1))
+plt.ylabel("accuracy")
+plt.grid()
 
 plt.show()
