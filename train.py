@@ -18,20 +18,22 @@ ds_train = datasets.FashionMNIST(
     download=True,
     transform=ds_transform
 )
+
 ds_test = datasets.FashionMNIST(
-    root="data",
-    train=False,
-    download=True,
-    transform=ds_transform
+    root = "data",
+    train = False,
+    download = True,
+    transform = ds_transform
 )
 
 # ミニバッチを分割する。DataLoaderを作る。
 batch_size = 64
 dataloader_train = torch.utils.data.DataLoader(
-    ds_train, batch_size=batch_size, shuffle=True
+    ds_train, batch_size = batch_size, shuffle=True
 )
+
 dataloader_test = torch.utils.data.DataLoader(
-    ds_test, batch_size=batch_size
+    ds_test, batch_size = batch_size
 )
 
 # モデルのインスタンスを作成
@@ -41,7 +43,7 @@ model = models.MyModel()
 loss_fn = torch.nn.CrossEntropyLoss()
 
 # 最適化手法
-learning_rate=le-3
+learning_rate = 1e-3
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
 
 n_epochs = 20
@@ -52,19 +54,18 @@ train_acc_log = []
 val_acc_log = []
 
 for epoch in range(n_epochs):
-    print(f"epoch {epoch+1}/{n_epochs}")
+    print(f"epoch {epoch+1} / {n_epochs}")
 
     time_start = time.time()
     train_loss = models.train(model, dataloader_train, loss_fn, optimizer)
     time_end = time.time()
-    print(f"   training loss: {train_loss} ({time_end-time_start:.3f}s)")
-    print(f"   training loss: {train_loss:.3f} ({time_end-time_start:.3f}s)")
+    print(f"   training loss:{train_loss:.3f}({time_end-time_start:.3f}s)")
     train_loss_log.append(train_loss)
 
-    time_start=time.time()
-    val_loss = models.test(model, dataloader_test, loss_fn)
-    time_end = time.time
-    print(f"  validation loss: {val_loss:.3f}({time_end-time_start:/.3f}s)")
+    time_start = time.time()
+    val_loss = models.test(model, dataloader_train, loss_fn)
+    time_end = time.time()
+    print(f"   validation loss:{val_loss:.3f}({time_end-time_start:.3f}s)")
     val_loss_log.append(val_loss)
 
     time_start = time.time()
@@ -98,7 +99,7 @@ plt.subplot(1, 2, 2)
 plt.plot(range(1, n_epochs + 1), train_acc_log, label='train')
 plt.legend()
 
-plt.plot(range(1, n_epochs + 1), vall_acc_log, label="validation")
+plt.plot(range(1, n_epochs + 1), val_acc_log, label="validation")
 plt.legend()
 plt.xlabel("epochs")
 plt.xticks(range(1, n_epochs + 1))
